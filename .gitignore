@@ -58,4 +58,7 @@ Temporary Items
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61a24551650b0a37fe413aec4a553a6278443699
