@@ -1,2 +1,1 @@
-# Detection-Segmentation-Tracking
-This repository is mainly to solve the problem of perspective distortion in overhead camera field of views.
+This repository is for tracking passengers in multicamera systems.
