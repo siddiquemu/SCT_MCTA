@@ -67,14 +67,14 @@ pip install -r panet_requirements.yml
 ```
 ```
 
-[ ] To train the SSL model on the unlabeled data pretrained model:
+[ ] To train the SSL model on the unlabeled data using pretrained model:
 
 1.  go to root directory and run
 
 ```
 ```
 
-### Citing ssl_flower_semantic ###
+### Citing SCT_MCTA ###
 If you find this work helpful in your research, please cite using the following bibtex
 ```
 @ARTICLE{siddiqueMulticamTSMC2022,
