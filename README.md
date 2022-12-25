@@ -1,5 +1,5 @@
 # Tracking Passengers and Baggage Items using Multiple Overhead Cameras at Security Checkpoints.
-(Accepted by IEEE Transactions on Systems, Man, and Cybernetics: Systems ). Preprint version [arxiv paper](https://arxiv.org/abs/2007.07924)
+(Published by IEEE Transactions on Systems, Man, and Cybernetics: Systems) [published paper](https://ieeexplore.ieee.org/document/9984680/media#media). Preprint version [arxiv paper](https://arxiv.org/abs/2007.07924)
 
 # codeabse progress for Self-Supervised Learning (SSL) detector
 - [ ] Prepare data for SSL training and testing
@@ -77,11 +77,15 @@ pip install -r panet_requirements.yml
 ### Citing ssl_flower_semantic ###
 If you find this work helpful in your research, please cite using the following bibtex
 ```
-@article{siddique2020tracking,
-  title={Tracking passengers and baggage items using multi-camera systems at security checkpoints},
+@ARTICLE{siddiqueMulticamTSMC2022,
   author={Siddique, Abubakar and Medeiros, Henry},
-  journal={arXiv preprint arXiv:2007.07924},
-  year={2020}
-}
+  journal={IEEE Transactions on Systems, Man, and Cybernetics: Systems}, 
+  title={Tracking Passengers and Baggage Items Using Multiple Overhead Cameras at Security Checkpoints}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={1-13},
+  doi={10.1109/TSMC.2022.3225252}}
+
 
 ```
