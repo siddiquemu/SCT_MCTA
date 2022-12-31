@@ -58,6 +58,7 @@ pip install -r panet_requirements.yml
 2. run the following script to evaluate the SSL detector models
 
 ```
+bash run_ssl_panet.sh
 ```
 
 ### [ ] Train ###
