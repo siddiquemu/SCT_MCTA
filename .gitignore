@@ -1,5 +1,9 @@
 data/*
 output/*
+SSL_PANet/Results
+SSL_PANet/tools_unused
+*.pth
+*.th
 *.pyc
 *~
 
