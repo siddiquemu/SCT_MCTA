@@ -53,6 +53,11 @@ pip install -r panet_requirements.yml
 ```
 
 ### [ ] Test ###
+
+```
+cd SCT_MCTA/SSL_PANet
+```
+
 1. To test the models, download models from
 
 2. run the following script to evaluate the SSL detector models
@@ -62,7 +67,11 @@ bash run_ssl_panet.sh
 ```
 
 ### [ ] Train ###
-[ ] To train the SL model using train set:
+[x] To train the SL model using train set:
+
+```
+cd SCT_MCTA/SSL_PANet
+```
 1. run the following script to generate pseudo-labels for the unlabeled frames
 
 ```
