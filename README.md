@@ -9,7 +9,7 @@
 - [x] Test the SSL detector model
 
 # codeabse progress for Single-Camera Tracking (SCT)
-- [ ] Finetune [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) detector (ResNet-50 Faster-RCNN) using SSL or use SSL PANet for detection
+- [ ] Finetune [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) detector (ResNet-50 Faster-RCNN) using SSL FRCNN or SSL PANet predictions
 - [ ] Evaluate the SCT model
 
 # codeabse progress for Multi-Camera Tracklet Association (MCTA)
