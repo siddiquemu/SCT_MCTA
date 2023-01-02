@@ -52,7 +52,7 @@ pip install -r panet_requirements.yml
 ```
 ```
 
-### [ ] Test SSL_PANet###
+### [ ] Test SSL_PANet ###
 
 ```
 cd SCT_MCTA/SSL_PANet
@@ -66,7 +66,7 @@ cd SCT_MCTA/SSL_PANet
 bash run_ssl_panet.sh
 ```
 
-### [ ] Train SSL_PANet###
+### [ ] Train SSL_PANet ###
 [x] To train the SL model using train set:
 
 ```
@@ -82,10 +82,10 @@ for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 0 
 ```
 for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_aug_train ${ITER} 0 2; done
 ```
-### [ ] Test SCT###
+### [ ] Test SCT ###
 Will be updated soon...
 
-### [ ] Test MCTA###
+### [ ] Test MCTA ###
 Will be updated soon...
 
 ### Citing SCT_MCTA ###
