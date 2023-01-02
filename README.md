@@ -45,14 +45,14 @@ pip install -r panet_requirements.yml
 ```
 
 ### [ ] Data Preprocessing ###
-1. Download the data from 
+1. Download the data from: (will be updated soon)
 ```
 ```
 2. run the following script from root to generate the train/test split
 ```
 ```
 
-### [ ] Test ###
+### [ ] Test SSL_PANet###
 
 ```
 cd SCT_MCTA/SSL_PANet
@@ -66,7 +66,7 @@ cd SCT_MCTA/SSL_PANet
 bash run_ssl_panet.sh
 ```
 
-### [ ] Train ###
+### [ ] Train SSL_PANet###
 [x] To train the SL model using train set:
 
 ```
@@ -82,6 +82,11 @@ for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 0 
 ```
 for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_aug_train ${ITER} 0 2; done
 ```
+### [ ] Test SCT###
+Will be updated soon...
+
+### [ ] Test MCTA###
+Will be updated soon...
 
 ### Citing SCT_MCTA ###
 If you find this work helpful in your research, please cite using the following bibtex
