@@ -60,6 +60,14 @@ import multiprocessing as mp
 from itertools import islice
 from init_pseudo_labels_dirs import get_all_dirs
 from pycocotools.coco import COCO
+from pathlib import Path
+
+
+FILE = Path(__file__).resolve()
+ROOT = FILE.parents[0]  # YOLOv5 root directory
+if str(ROOT) not in sys.path:
+   sys.path.append(str(ROOT))  # add ROOT to PATH
+ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 class Pseudo_Labels(object):
     # goal is to reduce pseudo-labels computation time by the number of subprocess
@@ -256,7 +264,7 @@ class Pseudo_Labels(object):
         if det_size > 0:
             # cls_boxes contain box proposals predictions for all the target classes
             # are they maintain index order of the proposals?
-            det_class, mask_class = get_box_mask_single_cat(fr, cls_boxes, cls_segms, proposals=detPB, thresh=0,
+            det_class, mask_class, _ = get_box_mask_single_cat(fr, cls_boxes, cls_segms, proposals=detPB, thresh=0,
                                                  angle=angle, class_id=class_id, dataset=dataset, 
                                                  cls_segms_coarse=clas_segms_coarse, img=im, rgr_refine=apply_rgr)
         else:
@@ -446,8 +454,7 @@ class Pseudo_Labels(object):
             if angle > 0:
                 if self.verbose:
                     cam = self.im_name.split('/')[-3]
-                    #print(f'Image: {os.path.basename(self.im_name)}, Cam: {cam}, Rotated by: {angle}')
-                                                                       
+                    #print(f'Image: {os.path.basename(self.im_name)}, Cam: {cam}, Rotated by: {angle}')                                                   
                 imgrot = imutils.rotate_bound(im, angle)
             else:
                 imgrot = im
@@ -491,7 +498,7 @@ class Pseudo_Labels(object):
                         'found #remap dets: {}, #masks_rot: {}, #dets_rot: {}'.format(
                             len(dets), len(masks_rot), len(dets_rot))
 
-                    # collect augmented dets to apply MI-MS
+                    # collect augmented dets to apply mean-shift pn the augmented proposals
                     if (len(dets) > 0):
                         for i, box in enumerate(dets):
                             # append detections for each orientation
@@ -806,7 +813,7 @@ class Pseudo_Labels(object):
         """
         Iterate over a video frames to collect the automatically generated pseudo labels
         """
-        for fr_num in random.sample(self.img_subset, len(self.img_subset)):
+        for fr_num in random.sample(self.img_subset, 10): #len(self.img_subset)
 
             self.timers = defaultdict(Timer)
             start_time = time.time()
@@ -897,8 +904,21 @@ def parse_args():
         '--ssl_iter',
         help='SSL iteration index to make sure the pretrained model is loaded properly',
         default=0, type=int)
+    
+    parser.add_argument(
+        '--num_gpus',
+        help='number of gpu used during pseudo-labels generation',
+        default=2, type=int)
+    
+    parser.add_argument('--model_type', type=str, choices=['modified_loss', 'modified_loss_semi', 'modified_loss_wo_reg'], 
+                        default='modified_loss', help='model types')
 
-    parser.add_argument('--model_type', type=str, default='segm')
+    parser.add_argument('--models_dir', type=str, 
+                        default='/media/6TB_local/PANet_Models', help='models root dir')
+
+
+    parser.add_argument('--data_dir', type=str, 
+                        default='/media/6TB_local/tracking_wo_bnw/data/CLASP1', help='models root dir')
 
     parser.add_argument(
         '--no_cuda', dest='cuda', help='Do not use CUDA device', action='store_false')
@@ -935,8 +955,8 @@ def parse_args():
 if __name__ == '__main__':
     """Script to generate N-fold pseudo-labels in SSL using multi-processing
     1. Rotation: 20 fold: fixed/randomly
-    2. TODO: Color Jitter and Scale Jitter: 5x4 fold: randomly select color and scale for each
-    3. TODO: Rotation, Color Jitter, and Scale Jitter: 4x3x2 fold: randomly select color and scale for each  
+    2. Color Jitter and Scale Jitter: 5x4 fold: randomly select color and scale for each
+    3. Rotation, Color Jitter, and Scale Jitter: 4x3x2 fold: randomly select color and scale for each  
     """
     #torch.multiprocessing.set_start_method('spawn')
     import warnings
@@ -948,14 +968,12 @@ if __name__ == '__main__':
     print('Called with args:')
     print(args)
     # start multiprocess for multi-camera pseudo label generation
-    storage = '/media/siddique/464a1d5c-f3c4-46f5-9dbb-bf729e5df6d62'
-    num_gpus = 2
-    #storage = '/media/abubakarsiddique'
-    # num_gpus = 4
+    storage = ROOT #'/media/siddique/464a1d5c-f3c4-46f5-9dbb-bf729e5df6d62'
+    num_gpus = args.num_gpus
 
 
-    models_dir = 'PANet_Models'
-    model_type = 'modified_loss' #'modified_loss_semi' #'modified_loss' 'modified_loss_wo_reg'
+    models_dir = args.models_dir
+    model_type = args.model_type
     exp = args.ssl_iter
     percent_gt = args.label_percent
     init_params = {}
@@ -963,7 +981,7 @@ if __name__ == '__main__':
     init_params['data'] = f'{args.database}_2021'
     
     init_params['regress_aug_prop'] = True
-    init_params['semi_supervised'] = True
+    init_params['semi_supervised'] = False
     init_params['apply_cluster_mode'] = True
     init_params['verbose'] = False
     

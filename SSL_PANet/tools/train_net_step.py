@@ -23,7 +23,6 @@ import nn as mynn
 import utils.net as net_utils
 import utils.misc as misc_utils
 from core.config import cfg, cfg_from_file, cfg_from_list, assert_and_infer_cfg
-#from core.config_flower import cfg, cfg_from_file, cfg_from_list, assert_and_infer_cfg
 from datasets.roidb import combined_roidb_for_training
 from roi_data.loader import RoiDataLoader, MinibatchSampler, BatchSampler, collate_minibatch
 from modeling.model_builder import Generalized_RCNN
@@ -65,7 +64,7 @@ def parse_args():
         help='SSL iteration index to make sure the pretrained model is loaded properly',
         default=0, type=int)
     parser.add_argument('--model_type', type=str, default='segm')
-    parser.add_argument('--learning_type', type=str, default='semi')
+    parser.add_argument('--learning_type', type=str, choices=['SL','SSL','semi'], default='SSL')
     parser.add_argument(
         '--working_dir', help='checkpoint path to load and save')
     parser.add_argument(
@@ -426,13 +425,12 @@ dict_keys(['coco_url', 'height', 'width', 'flickr_url', 'id', 'dataset', 'image'
     print('solver type: {}'.format(cfg.SOLVER.TYPE))
     if cfg.SOLVER.TYPE == "SGD":
         optimizer = torch.optim.SGD(params, momentum=cfg.SOLVER.MOMENTUM)
-        pdb.set_trace()
+
     elif cfg.SOLVER.TYPE == "Adam":
         optimizer = torch.optim.Adam(params)
 
     ### Load checkpoint
     if args.working_dir:
-        #
         #semi start with iter1, i.e use iter0 model for pseudo labels
         if args.learning_type=='semi':
             load_name = os.path.join(args.working_dir, f'{args.label_percent}_percent/iter{args.ssl_iter-1}/ckpt/model_step19999.pth')
@@ -451,6 +449,7 @@ dict_keys(['coco_url', 'height', 'width', 'flickr_url', 'id', 'dataset', 'image'
             load_name = args.load_ckpt
         logging.info("loading checkpoint %s", load_name)
         assert os.path.exists(load_name)
+        
         checkpoint = torch.load(load_name, map_location=lambda storage, loc: storage)
         #FreezeConvnet is upto resnet50 or 101 architechture
         if args.model_type=='segm':
@@ -574,7 +573,6 @@ dict_keys(['coco_url', 'height', 'width', 'flickr_url', 'id', 'dataset', 'image'
                     if key != 'roidb': # roidb is a list of ndarrays with inconsistent length
                         input_data[key] = list(map(Variable, input_data[key]))
 
-                pdb.set_trace()
                 net_outputs = maskRCNN(**input_data)
                 training_stats.UpdateIterStats(net_outputs, inner_iter)
                 #TODO: add regularize term
