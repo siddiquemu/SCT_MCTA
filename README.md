@@ -4,9 +4,9 @@
 # codeabse progress for Self-Supervised Learning (SSL) detector
 - [ ] Prepare data for SSL training and testing
 - [ ] Train initial Supervised Learning (SL) ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model using train set
-- [ ] Generate pseudo-labels for training ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model
-- [ ] Train iteratively using pseudo labels
-- [ ] Evaluate the SSL detector model
+- [x] Generate pseudo-labels for training ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model
+- [x] Train iteratively using pseudo labels
+- [x] Test the SSL detector model
 
 # codeabse progress for Single-Camera Tracking (SCT)
 - [ ] Finetune [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) detector (ResNet-50 Faster-RCNN) using SSL or use SSL PANet for detection
@@ -63,16 +63,15 @@ bash run_ssl_panet.sh
 
 ### [ ] Train ###
 [ ] To train the SL model using train set:
-1. run the following script
+1. run the following script to generate pseudo-labels for the unlabeled frames
 
 ```
+for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 0 2; done
 ```
-
-[ ] To train the SSL model on the unlabeled data using pretrained model:
-
-1.  go to root directory and run
+2. run the following to start training using the generated psudo-labels
 
 ```
+for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_aug_train ${ITER} 0 2; done
 ```
 
 ### Citing SCT_MCTA ###
