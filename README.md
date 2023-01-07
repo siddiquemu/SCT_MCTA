@@ -45,7 +45,7 @@ pip install -r panet_requirements.yml
 ```
 
 ### [ ] Data Preprocessing ###
-1. Collect data upon request at [ALERT](alert-coe@northeastern.edu)
+1. Collect data upon request at [alert-coe@northeastern.edu](https://alert.northeastern.edu/)
 
 Folder structure for CLASP1 datasets:
 
