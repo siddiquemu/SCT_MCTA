@@ -48,6 +48,7 @@ pip install -r panet_requirements.yml
 1. Collect data upon request at [ALERT](alert-coe@northeastern.edu)
 
 Folder structure for CLASP1 datasets:
+
 ```
 CLASP1/train_gt
 ├── A_11
@@ -100,8 +101,10 @@ CLASP1/train_gt
     ├── img1
     ├── test_frames
     └── train_frames
+```
 
 Folder structure for CLASP2 datasets:
+
 ```
 CLASP2/train_gt/
 ├── G_11
