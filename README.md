@@ -147,8 +147,6 @@ CLASP2/train_gt/
 
 ```
 2. run the following script from root to generate the train/test split
-```
-```
 
 ### [ ] Test SSL_PANet ###
 
