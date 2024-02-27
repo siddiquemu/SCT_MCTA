@@ -1,6 +1,6 @@
 # Tracking Passengers and Baggage Items using Multiple Overhead Cameras at Security Checkpoints.
 (Published by IEEE Transactions on Systems, Man, and Cybernetics: Systems) [published paper](https://ieeexplore.ieee.org/document/9984680). Preprint version [arxiv paper](https://arxiv.org/abs/2007.07924)
-
+- A docker will be released soon for testing SSL, SCT, and MCTA
 # codeabse progress for Self-Supervised Learning (SSL) detector
 - [ ] Prepare data for SSL training and testing
 - [ ] Train initial Supervised Learning (SL) ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model using train set
