@@ -5,8 +5,8 @@ def init_all_params(init_params, database, storage):
         camlist = [1, 2, 3, 4, 5, 6]#1: 'cam02exp2.mp4',
         init_params['cam_map'] = {1: 'G_9', 2: 'G_11', 3: 'H_11', 4: 'H_9'
                                   ,5: 'I_9', 6: 'I_11'}
-        benchmark = os.path.join(storage + 'data/CLASP/train_gt_all/PB_gt')
-        out_dir = os.path.join(storage + 'self-supervise-{}-det/'.format(database.lower()))
+        benchmark = os.path.join(storage, 'data/CLASP2/train_gt')
+        out_dir = os.path.join(storage, 'self-supervise-{}-det/'.format(database.lower()))
         init_params['dataset'] = 'C'
         init_params['dataset_map'] = 'C1'
         init_params['frame_rate'] = '10FPS'
@@ -16,6 +16,7 @@ def init_all_params(init_params, database, storage):
         init_params['img_HW'] = [1080.0, 1920.0]
         init_params['cam'] = camlist
         init_params['start_frame'] = 1000
+        init_params["class_map"] = {1:'PAX', 2:'Bag'}
 
     if database == 'KRI_exp2_train':
         camlist = [2, 5, 9, 11, 13, 14]#1: 'cam02exp2.mp4',
@@ -37,12 +38,14 @@ def init_all_params(init_params, database, storage):
 
     if database == 'CLASP1':
         camlist = [1, 2, 3, 4, 5]
-        benchmark = storage + 'tracking_wo_bnw/data/CLASP1/train_gt'
+        benchmark = os.path.join(storage,  'data/CLASP1/train_gt')
         init_params['dataset'] = 'A_9'
         init_params['frame_rate'] = '1FPS'
         init_params['server_loc'] = 'CLASP1'
         init_params['img_HW'] = [1080.0, 1920.0]
         init_params['cam'] = [9]
+        out_dir = os.path.join(storage, 'self-supervise-{}-det/'.format(database.lower()))
+        init_params["class_map"] = {1:'PAX', 2:'Bag'}
 
     if database == 'PVD':
         benchmark = os.path.join(storage, 'data/HDPVD_new/train_gt')
@@ -56,6 +59,7 @@ def init_all_params(init_params, database, storage):
         init_params['cam'] = 1
         init_params['train_cams'] = [1,3]
         init_params['batch_end'] = 5700
+        init_params["class_map"] = {1:'PAX', 2:'TSO'}
 
 
     if database == 'LOGAN':
