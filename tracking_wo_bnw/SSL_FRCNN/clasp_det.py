@@ -248,8 +248,8 @@ class SSL(object):
         net_inputs = [{"image": image, "height": image.shape[1], "width": image.shape[2]}]
 
         net_img = model.preprocess_image(net_inputs)
-        features = model.backbone(img.tensor)
-        proposals, _ = model.proposal_generator(img, features, None)
+        features = model.backbone(image.tensor)
+        proposals, _ = model.proposal_generator(image, features, None)
         # images.tensor.shape
         # TODO: proposals willbe replaced by clusters
         # proposals[0].get_fields()['proposal_boxes'][0]
@@ -413,19 +413,19 @@ class SSL(object):
             self.obj_detect = self.init_det_model(model_path)
         else:
             if self.init_flags['server_loc'] in ['LOGAN', 'CLASP1']:
-                model_path = os.path.join(ROOT.parent, self._config['SSL']['obj_detect_model_logan'])
+                model_path = os.path.join(self.init_flags['storage_root'], self._config['SSL']['obj_detect_model_logan'])
                 assert os.path.exists(model_path)
                 print('load {} at iteration {}'.format(model_path, iteration))
                 self.obj_detect = self.init_det_model(model_path)
 
             if self.init_flags['server_loc'] in ['CLASP2', 'PVD', 'MOT20']:
-                model_path = os.path.join(ROOT.parent, self._config['SSL']['obj_detect_model_base'])
+                model_path = os.path.join(self.init_flags['storage_root'], self._config['SSL']['obj_detect_model_base'])
                 assert os.path.exists(model_path)
                 print('load {} at iteration {}'.format(model_path, iteration))
                 self.obj_detect = self.init_det_model(model_path)
 
             if self.init_flags['server_loc'] in ['KRI_exp2_train']:
-                model_path = os.path.join(ROOT.parent, self._config['SSL']['obj_detect_model_kri_exp2_train'])
+                model_path = os.path.join(self.init_flags['storage_root'], self._config['SSL']['obj_detect_model_kri_exp2_train'])
                 assert os.path.exists(model_path)
                 print('load {} at iteration {}'.format(model_path, iteration))
                 self.obj_detect = self.init_det_model(model_path)
@@ -833,6 +833,7 @@ if __name__ == '__main__':
     init_params['GT'] = 1
     init_params['modes_by_nms'] = 0
     init_params['test_aug'] = 0
+    init_params['storage_root'] = storage
 
     init_params, benchmark, out_dir, camlist = init_all_params(init_params, database, storage)
     with open(osp.join(ROOT, 'cfg/SSL.yaml')) as file:

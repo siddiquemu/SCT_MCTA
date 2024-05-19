@@ -1,10 +1,8 @@
 SSL:
   name: SSL
-  # Subfolder name in output/tracker/
   module_name: PVD
   desription:
   seed: 12345
-  # frcnn or fpn
   network: fpn
 
   # frcnn
@@ -12,16 +10,18 @@ SSL:
   # obj_detect_config: output/frcnn/res101/mot_2017_train/180k/sacred_config.yaml
 
   # fpn
-  obj_detect_model_base: output/tracking_wo_bnw-output_v5/output/faster_rcnn_fpn_training_mot_17/model_epoch_27.model
+  obj_detect_model_base: models/tracking_wo_bnw-output_v5/output/faster_rcnn_fpn_training_mot_17/model_epoch_27.model
   detection_nms_thresh: 0.5
   detection_person_thresh: 0.7
   obj_detect_model_kri_exp2_train: ""
-  #obj_detect_model_clasp2: 'tracking_wo_bnw/output/self-supervise-clasp2-det/C1/iter0_C1/model_epoch_20.model'
+  obj_detect_model_clasp2: ""
   #logan data
   obj_detect_model_logan: ""
+  #pvd data
+  obj_det_model_pvd: "self-supervise-pvd-det/iter0/models/model_epoch_20.model"
 
-  reid_weights: output/tracktor/reid/train_gt/ResNet_iter_25048.pth
-  reid_config: output/tracktor/reid/sacred_config.yaml
+  reid_weights: models/tracking_wo_bnw-output_v5/tracktor/reid/train_gt/ResNet_iter_25048.pth
+  reid_config: models/tracking_wo_bnw-output_v5/tracktor/reid/sacred_config.yaml
   #for MCTA
   #cams: [2,9]
   interpolate: False

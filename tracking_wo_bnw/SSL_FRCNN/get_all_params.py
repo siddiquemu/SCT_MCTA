@@ -5,8 +5,8 @@ def init_all_params(init_params, database, storage):
         camlist = [1, 2, 3, 4, 5, 6]#1: 'cam02exp2.mp4',
         init_params['cam_map'] = {1: 'G_9', 2: 'G_11', 3: 'H_11', 4: 'H_9'
                                   ,5: 'I_9', 6: 'I_11'}
-        benchmark = storage + 'tracking_wo_bnw/data/CLASP/train_gt_all/PB_gt'
-        out_dir = storage + 'tracking_wo_bnw/output/self-supervise-{}-det/'.format(database.lower())
+        benchmark = os.path.join(storage + 'data/CLASP/train_gt_all/PB_gt')
+        out_dir = os.path.join(storage + 'self-supervise-{}-det/'.format(database.lower()))
         init_params['dataset'] = 'C'
         init_params['dataset_map'] = 'C1'
         init_params['frame_rate'] = '10FPS'
