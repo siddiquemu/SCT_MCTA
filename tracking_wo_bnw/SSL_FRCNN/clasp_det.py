@@ -67,6 +67,7 @@ class SSL(object):
         self.gpu_test = gpu_test
         self.gpu_train = gpu_train
         self.dataset = dataset
+        self.class_map = init_flags["class_map"]
         self.GT = None
         self.gt_vis_path = os.path.join(self.out_dir, 'gt_vis')
         if not os.path.exists(self.gt_vis_path):
@@ -184,25 +185,37 @@ class SSL(object):
         return angleSet
 
     def vis_gt(self, im, boxs, gt_vis_path=None, imname=None, cam_path=None):
-        class_label = {1:'PAX', 2:'TSO'}
         for bb in boxs:
             im = cv2.rectangle(im, (np.int(bb[2]), np.int(bb[3])), (np.int(bb[2]+bb[4]), np.int(bb[3]+bb[5])), (0,255,0), 4)
-            if self.num_class==3:
-                cat_id = self.get_target_labels(cam_path, bb[1])
+            # if self.num_class==3:
+            #     cat_id = self.get_target_labels(cam_path, bb[1])
+            if self.init_flags['server_loc'] in ["CLASP1", "CLASP2"]:
+                catID = int(bb[9])
+            elif self.init_flags['server_loc'] in ["PVD"] and len(self.class_map.keys())>1:
+                catID = int(bb[7])
             else:
-                cat_id = 1
+                # Single class model
+                catID = 1
 
-            cv2.putText(im, class_label[cat_id], (int(bb[2]+bb[4]/2), int(bb[3]+bb[5]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 0), 2)
+            cv2.putText(im, self.class_map[catID], (int(bb[2]+bb[4]/2), int(bb[3]+bb[5]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 0), 2)
         cv2.imwrite(os.path.join(gt_vis_path, os.path.basename(imname)), im)
 
     def get_manual_labels(self, cam_path):
-        gt_path = os.path.join(self.init_flags['gt_dir'], cam_path.split('/')[-1], 'gt/gt.txt')
-        #gt_path = os.path.join(self.init_flags['gt_dir'], cam_path.split('/')[-1], 'gt_tso/gt.txt')
+        if self.init_flags['server_loc'] in ["CLASP2"]:
+            gt_path = os.path.join(self.init_flags['gt_dir'], cam_path.split('/')[-1], 'gt_sct/gt.txt')
+        elif self.init_flags['server_loc'] in ["PVD"]:
+            gt_path = os.path.join(self.init_flags['gt_dir'], cam_path.split('/')[-1], 'gt_tso/gt.txt')
+        else:
+            gt_path = os.path.join(self.init_flags['gt_dir'], cam_path.split('/')[-1], 'gt/gt.txt')
         print('read gt from: {}'.format(gt_path))
         if os.path.exists(gt_path):
             self.GT = np.loadtxt(gt_path, delimiter=',')
             if self.init_flags['server_loc']=='KRI_exp2_train':
                 self.GT[:,0] = self.GT[:,0] + self.init_flags['fr_offset'][cam_path.split('/')[-1]]
+            elif self.init_flags['server_loc'] in ["CLASP1", "CLASP2"]:
+                self.GT = np.concatenate([self.GT[self.GT[:, 9]==class_id]  for class_id in self.class_map.keys()])
+            else:
+                pass
             print('gt frames {}'.format(np.unique(self.GT[:,0])))
         else:
             self.GT=[0]
@@ -304,7 +317,7 @@ class SSL(object):
             if self.cam == 11:
                 fr_num = fr_num - 0
                 img_path = os.path.join(img_path)
-            path_i = os.path.join(img_path, '{:06d}.png'.format(fr_num))
+            path_i = os.path.join(img_path, 'img1/{:06d}.png'.format(fr_num))
             assert os.path.exists(path_i), '{} does not exist'.format(path_i)
 
         if data_loc == 'LOGAN':
@@ -316,7 +329,7 @@ class SSL(object):
             assert os.path.exists(path_i), '{} does not exist'.format(path_i)
 
         if data_loc == 'CLASP2':
-            path_i = os.path.join(img_path, 'img1/{:05d}.jpg'.format(fr_num))
+            path_i = os.path.join(img_path, 'img1/{:06d}.png'.format(fr_num))
 
         if data_loc == 'KRI_exp2_train':
             path_i = os.path.join(img_path, 'img1/{:05d}.jpg'.format(fr_num))
@@ -413,7 +426,7 @@ class SSL(object):
             self.obj_detect = self.init_det_model(model_path)
         else:
             if self.init_flags['server_loc'] in ['LOGAN', 'CLASP1']:
-                model_path = os.path.join(self.init_flags['storage_root'], self._config['SSL']['obj_detect_model_logan'])
+                model_path = os.path.join(self.init_flags['storage_root'], self._config['SSL']['obj_detect_model_base'])
                 assert os.path.exists(model_path)
                 print('load {} at iteration {}'.format(model_path, iteration))
                 self.obj_detect = self.init_det_model(model_path)
@@ -697,15 +710,16 @@ class SSL(object):
                                         #assert len(box) == 9, 'box {}'.format(box)
                                         # [fr, i, bbox[0], bbox[1], w, h, score, classes[i]]
                                     #define class_id for pax and TSO
-                                    if self.num_class==3:
-                                        catID = self.get_target_labels(cam_path, box[1])
+                                    # if self.num_class==3:
+                                    #     catID = self.get_target_labels(cam_path, box[1])
+                                    if self.init_flags['server_loc'] in ["CLASP1", "CLASP2"]:
+                                        catID = int(box[9])
+                                    elif self.init_flags['server_loc'] in ["PVD"] and len(self.class_map.keys())>1:
+                                        catID = int(box[7])
                                     else:
+                                        # Single class model
                                         catID = 1
                                     assert catID==1 or catID==2
-                                    # if box[7] == 1:
-                                    #     catID = 1
-                                    # else:
-                                    #     catID = 2
                                     print('writing dets for catID {}'.format(catID))
                                     self.test_aug_dets.append(
                                         [imgIdnew, box[1]] + [round(x, 2) for x in box[2:6]] + [1, 1, 1, catID])
@@ -823,7 +837,7 @@ if __name__ == '__main__':
     # loop over all datasets
     server = '/media/abubakar/PhD_Backup'
     storage = '/media/abubakar/PhD_Backup'
-    database = 'PVD' #'KRI_exp2_train' #'CLASP2' #'PVD' #'CLASP2' #'MOT20'  # 'LOGAN' #'PVD'
+    database = 'CLASP2' #'CLASP1' #'PVD' #'CLASP2'
 
     init_params = {}
     #Semisupervised: use both gt and precomputed/augmented detections
