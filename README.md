@@ -4,12 +4,12 @@
 # codeabse progress for Self-Supervised Learning (SSL) detector
 - [ ] Prepare data for SSL training and testing
 - [ ] Train initial Supervised Learning (SL) ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model using train set
-- [x] Generate pseudo-labels for training ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model
-- [x] Train iteratively using pseudo labels
-- [x] Test the SSL detector model
+- [ ] Generate pseudo-labels for training ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model
+- [ ] Train iteratively using pseudo labels
+- [ ] Test the SSL detector model
 
 # codeabse progress for Single-Camera Tracking (SCT)
-- [ ] Finetune [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) detector (ResNet-50 Faster-RCNN) using SSL FRCNN or SSL PANet predictions
+- [x] Finetune [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) detector (ResNet-50 Faster-RCNN) using SSL FRCNN or SSL PANet predictions
 - [ ] Evaluate the SCT model
 
 # codeabse progress for Multi-Camera Tracklet Association (MCTA)
@@ -23,14 +23,12 @@
 * Pycocotools 2.0
 
 ### Requirements for Tracktor detector: ###
-* Detectron2
+* CUDA 11.2
 * Python 3.8
 * Pytorch 1.9
-* CUDA 10.2
 * Pycocotools 2.0
 
-### [ ] Installation ###
-
+### [ ] PANet Installation for SSL-PANet Training ###
 1. clone this repository and go to root folder
 ```python
 https://github.com/siddiquemu/SCT_MCTA.git
@@ -43,8 +41,26 @@ pip install -r panet_requirements.yml
 3. This codebase is heavily based on instance segmentation network [PANet](https://github.com/facebookresearch/detectron2) and an SCT [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw). Install both in separate environment
 ```SCT_MCTA
 ```
+### [x] Tracktor Installation for SSL-FRCNN Training ###
 
-### [ ] Data Preprocessing ###
+1. clone this repository and go to root folder
+```python
+https://github.com/siddiquemu/SCT_MCTA.git
+cd SCT_MCTA/tracking_wo_bnw
+```
+2. Install tracktor similar to [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) but we do not need to clone latest repo.
+3. Run the command
+```
+cd SCT_MCTA/SSL_FRCNN
+python clasp_det.py
+```
+3. Edit the configs for data and pretrained model directories
+```
+./cfg/SSL.yaml
+clasp_det.py
+```
+
+### [x] Data Preprocessing ###
 1. Collect data upon request at [alert-coe@northeastern.edu](https://alert.northeastern.edu/)
 
 Folder structure for CLASP1 datasets:
