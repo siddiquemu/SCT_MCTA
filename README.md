@@ -1,6 +1,6 @@
 # Tracking Passengers and Baggage Items using Multiple Overhead Cameras at Security Checkpoints.
 (Published by IEEE Transactions on Systems, Man, and Cybernetics: Systems) [published paper](https://ieeexplore.ieee.org/document/9984680). Preprint version [arxiv paper](https://arxiv.org/abs/2007.07924)
-
+- A docker will be released soon for testing SSL, SCT, and MCTA
 # codeabse progress for Self-Supervised Learning (SSL) detector
 - [ ] Prepare data for SSL training and testing
 - [ ] Train initial Supervised Learning (SL) ResNet-50 ([PANet](https://github.com/ShuLiu1993/PANet)) model using train set
@@ -45,10 +45,109 @@ pip install -r panet_requirements.yml
 ```
 
 ### [ ] Data Preprocessing ###
-1. Download the data from: (will be updated soon)
+1. Collect data upon request at [alert-coe@northeastern.edu](https://alert.northeastern.edu/)
+
+Folder structure for CLASP1 datasets:
+
 ```
+CLASP1/train_gt
+├── A_11
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── A_9
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── B_11
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── B_9
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── C_11
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── C_9
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── D_11
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── D_9
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── E_11
+│   ├── gt
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+└── E_9
+    ├── gt
+    ├── img1
+    ├── test_frames
+    └── train_frames
 ```
+
+Folder structure for CLASP2 datasets:
+
+```
+CLASP2/train_gt/
+├── G_11
+│   ├── gt
+│   ├── gt_sct
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── G_9
+│   ├── gt
+│   ├── gt_sct
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── H_11
+│   ├── gt
+│   ├── gt_sct
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── H_9
+│   ├── gt
+│   ├── gt_sct
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+├── I_11
+│   ├── gt
+│   ├── gt_sct
+│   ├── img1
+│   ├── test_frames
+│   └── train_frames
+└── I_9
+    ├── gt
+    ├── gt_sct
+    ├── img1
+    ├── test_frames
+    └── train_frames
+```
+
+
 2. run the following script from root to generate the train/test split
+
 ```
 ```
 
