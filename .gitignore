@@ -2,9 +2,22 @@ data/*
 output/*
 SSL_PANet/Results
 SSL_PANet/tools_unused
+tracking_wo_bnw/output
+tracking_wo_bnw/experiments/scripts/MCTA/discrete_frechet
+tracking_wo_bnw/vision
+tracking_wo_bnw/tensorboard
+tracking_wo_bnw/.vscode
+tracking_wo_bnw/*.ipynb_checkpoints
+tracking_wo_bnw/*.ipynb
+<<<<<<< HEAD
+tracking_wo_bnw/models
+=======
+>>>>>>> master
 *.pth
 *.th
 *.pyc
+*.ipynb
+*.ipynb_checkpoints
 *~
 
 *.o
@@ -62,7 +75,3 @@ Temporary Items
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
-<<<<<<< HEAD
-
-=======
->>>>>>> 61a24551650b0a37fe413aec4a553a6278443699

@@ -1,0 +1,48 @@
+reid:
+  name: train_gt_pvd #train_gt #train_gt_pvd #train_gt #test
+  module_name: reid
+  desription:
+  seed: 12345
+  # smth like MOT_train, KITTI_train_Pedestrian
+  #db_train: clasp_reid_train_gt #mot_reid_small_train
+  db_train: clasp1_train_reid #mot_reid_small_train
+  db_val: False
+
+  model_args:
+    # Recommended for loss: batch_all, batch_hard
+    # Unstable, no guarantee they are working: weighted_triplet, cross_entropy
+    loss: batch_hard
+    margin: 0.2
+    # Plot prec at k to tensorboard, 0 for off
+    prec_at_k: 3
+
+  solver:
+    optim: Adam
+    optim_args:
+      lr: 0.0003
+      weight_decay: 0.0000
+
+  dataloader:
+    # all targets with visibility lower than this are filtered out, for kitti set it to
+    # a sequence with maximal [truncation, occlusion] levels
+    vis_threshold: 0
+    #clasp2 gt is significantly sparse: each 100th frame
+    P: 18 # mot17-18, clasp2-10
+    K: 4 #mot17-4, clasp2-2 : filter out tracks smaller than K
+    # limit maximum number of images per identity
+    max_per_person: 1000 #clasp2-50, mot17-1000
+    crop_H: 256
+    crop_W: 128 #lateral:128, overhead:192
+    # center: just a center crop, random: random crop and 0.5 horizontal flip probability
+    transform: random
+    normalize_mean:
+      - 0.485
+      - 0.456
+      - 0.406
+    normalize_std:
+      - 0.229
+      - 0.224
+      - 0.225
+
+  cnn:
+    output_dim: 128
