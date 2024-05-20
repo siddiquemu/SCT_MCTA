@@ -32,15 +32,29 @@
 1. clone this repository and go to root folder
 ```python
 https://github.com/siddiquemu/SCT_MCTA.git
-cd SCT_MCTA
+cd SCT_MCTA/SSL_PANet
 ```
-2. create environment
+2. create environment by following instance segmentation network [PANet](https://github.com/ShuLiu1993/PANet) (need torch 0.4.0)
 ```python
 pip install -r panet_requirements.yml
 ```
-3. This codebase is heavily based on instance segmentation network [PANet](https://github.com/facebookresearch/detectron2) and an SCT [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw). Install both in separate environment
-```SCT_MCTA
-```
+3. Dataset preparation for running PANet-based SSL
+   - For unlabeled data following command from SSL_PANet root folder
+    ```
+    python tools/clasp_unlabeled_json.py 
+    ```
+   - For labeled data run the following
+    ```
+    python tools/clasp_gt_annotations.py  
+    ```
+   - For labeled, unlabeled, and augmentded data preparation run the above two steps and then run the following
+    ```
+    for ITER in 4; do  bash tools/train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 10 2; done  
+    ```
+4. Start iterative training (including pseudo-label generation steps) using the following command
+   ```
+   for ITER in 4; do  bash tools/train_semi_iters_clasp1.sh SSL_aug_train ${ITER} 10 2; done  
+   ```
 ### [x] Tracktor Installation for SSL-FRCNN Training ###
 
 1. clone this repository and go to root folder
@@ -198,7 +212,7 @@ for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 0 
 for ITER in 1; do   bash train_semi_iters_clasp1.sh SSL_aug_train ${ITER} 0 2; done
 ```
 ### [ ] Test SCT ###
-Will be updated soon...
+This codebase is heavily based on SCT [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw).
 
 ### [ ] Test MCTA ###
 Will be updated soon...
