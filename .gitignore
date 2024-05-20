@@ -9,10 +9,7 @@ tracking_wo_bnw/tensorboard
 tracking_wo_bnw/.vscode
 tracking_wo_bnw/*.ipynb_checkpoints
 tracking_wo_bnw/*.ipynb
-<<<<<<< HEAD
-tracking_wo_bnw/models
-=======
->>>>>>> master
+.vscode
 *.pth
 *.th
 *.pyc
