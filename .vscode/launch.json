@@ -14,5 +14,42 @@
             "args": [
             ]
         },
+        {
+            "name": "Python: /media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/pseudo_labels_ngpu_bash.py",
+            "type": "python",
+            "request": "launch",
+            "program": "/media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/pseudo_labels_ngpu_bash.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--ssl_iter", "1",
+                "--database", "clasp1",
+                "--label_percent", "10",
+                "--cfg", "/media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/configs/panet/e2e_panet_R-50-FPN_2x_mask.yaml",
+                "--models_dir", "/media/abubakar/PhD_Backup/models/clasp1",
+                "--data_dir", "/media/abubakar/PhD_Backup/data/CLASP1",
+                "--model_type", "modified_loss"
+            ]
+        },
+        {
+            "name": "Python: /media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/clasp_unlabeled_json.py",
+            "type": "python",
+            "request": "launch",
+            "program": "/media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/clasp_unlabeled_json.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+            ]
+        },
+        {
+            "name": "Python: /media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/clasp2_gt_annotations.py",
+            "type": "python",
+            "request": "launch",
+            "program": "/media/abubakar/PhD_Backup/codes/SCT_MCTA/SSL_PANet/tools/clasp2_gt_annotations.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+            ]
+        },
     ]
 }

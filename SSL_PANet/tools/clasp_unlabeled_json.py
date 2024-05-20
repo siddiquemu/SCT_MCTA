@@ -5,6 +5,7 @@ from __future__ import print_function
 import argparse
 import distutils.util
 import os
+from pathlib import Path
 import sys
 import numpy as np
 import cv2
@@ -21,27 +22,23 @@ import copy
 # thread safe and causes unwanted GPU memory allocations.
 cv2.ocl.setUseOpenCL(False)
 
-def main(folders, angleSet, dataset_clasp, output_dir):
+def main(input_img_dir, angleSet, dataset_clasp, output_dir, data_fmt, fr_factor=1):
     """main function"""
 
     # save all images in one folder
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    fr = 1
-    folders = sorted(folders)
-    for cam_path in folders:
-        # get training set
-        image_dir = cam_path
-        imglist = sorted(glob.glob(os.path.join(image_dir, '*')))
-        num_images = len(imglist)
-
+    for stream_dir in Path(input_img_dir).iterdir():
+        imglist = stream_dir.rglob(f"*.{data_fmt}")
+        fr = 1
         # loop over all the annotated image
-        for i, im_name in enumerate(imglist):
+        for im_name in imglist:
+            im_name = str(im_name)
             fr_num = float(os.path.basename(im_name).split('.')[0])
 
             # search training set frames for augmented detections
-            if fr_num % 40 == 0:
+            if fr_num % fr_factor == 0:
                 im = cv2.imread(im_name)
 
                 blankImg = im
@@ -49,7 +46,7 @@ def main(folders, angleSet, dataset_clasp, output_dir):
                 for angle in angleSet:
                     if angle > 0:
                         print('Image: {}, Cam: {}, Rotated by: {},'.format(os.path.basename(im_name),
-                                                                           im_name.split('/')[-3], angle))
+                                                                        im_name.split('/')[-3], angle))
                         imgrot = imutils.rotate_bound(blankImg, angle)
                     else:
                         imgrot = blankImg
@@ -63,7 +60,7 @@ def main(folders, angleSet, dataset_clasp, output_dir):
 
                         if not os.path.exists(img_write_path):
                             dataset_clasp = Write_ImagesInfo(imgrot, imgname, int(imgIdnew), dataset_clasp)
-                            print('{}: writing image {}'.format(cam_path.split('/')[-1], imgname))
+                            print('{}: writing image {}'.format(Path(im_name).parent.parent.stem, imgname))
                             cv2.imwrite(img_write_path, imgrot)
 
                         dataset_clasp = Write_ImagesInfo(imgrot, imgname, int(imgIdnew), dataset_clasp)
@@ -80,32 +77,30 @@ def delete_all(demo_path, fmt='png'):
 
 
 if __name__ == '__main__':
-    storage = '/media/siddique/464a1d5c-f3c4-46f5-9dbb-bf729e5df6d61'
+    storage = '/media/abubakar/PhD_Backup'
     # required inputs
-    data_type = 'clasp1_unlabeled'
+    data_type = 'clasp2_unlabeled'
     save_data = 1
     test_aug = 0
+    fr_factor = 60 # to sample frmaes at different rate
+    data_fmt = "png"
 
     if data_type == 'clasp2_unlabeled':
-        benchmark_path = storage + '/tracking_wo_bnw/data/CLASP/train_gt_all/PB_no_gt/'
-        save_data_dir = storage + '/SoftTeacher/data/clasp2/'
-        imgResultDir = save_data_dir + 'unlabeledCLASP2/'
-        savefilename = save_data_dir + 'annotations/instances_unlabeledCLASP2.json'
+        save_data_dir = os.path.join(storage, 'data/clasp2')
+        input_img_dir = os.path.join(save_data_dir, "train_gt")
+        imgResultDir = os.path.join(save_data_dir, 'unlabeledCLASP2')
+        savefilename = os.path.join(imgResultDir, 'instances_unlabeledCLASP2.json')
         SaveImgDir = imgResultDir
 
     elif data_type == 'clasp1_unlabeled':
-        benchmark_path = '/media/siddique/RemoteServer/LabFiles/CLASP/CLASP_Data/Data_GT/' \
-                 'ourdataset/'
-        cams = ['exp6a/imgs/cam02exp6a.mp4','exp6a/imgs/cam05exp6a.mp4',
-                'exp7a/imgs/cam02exp7a.mp4','exp7a/imgs/cam05exp7a.mp4',
-                'exp9a/imgs/cam02exp9a.mp4','exp9a/imgs/cam05exp9a.mp4',
-                'exp10a/imgs/cam02exp10a.mp4','exp10a/imgs/cam05exp10a.mp4',
-                'exp5a/imgs/cam02exp5a.mp4','exp5a/imgs/cam05exp5a.mp4']
-
-        save_data_dir = storage + '/SoftTeacher/data/clasp1/'
-        imgResultDir = save_data_dir + 'unlabeledCLASP1/'
-        savefilename = imgResultDir + '/instances_unlabeledCLASP1.json'
+        save_data_dir = os.path.join(storage, 'data/clasp1')
+        input_img_dir = os.path.join(save_data_dir, "train_gt")
+        imgResultDir = os.path.join(save_data_dir, 'unlabeledCLASP1')
+        savefilename = os.path.join(imgResultDir, 'instances_unlabeledCLASP1.json')
         SaveImgDir = imgResultDir
+    else:
+        raise Exception
+
     # clear path files
     if os.path.exists(imgResultDir):
         delete_all(imgResultDir, fmt='png')
@@ -115,16 +110,12 @@ if __name__ == '__main__':
         # angleSet =[0, 12, 84, 90, 180, 186, 264, 270, 348, 354]
         angleSet = [0, 6, 12, 78, 84, 90, 96, 102, 168, 174, 180, 186, 192, 258, 264, 270, 276, 342, 348, 354]
         saveAugResult = 1
-
     else:
         angleSet = [0]
         saveAugResult = 0
     dataset_clasp = define_dataset_dictionary()
 
-
-    folders = [benchmark_path + cam for cam in cams]
-
-    dataset_clasp = main(folders, angleSet, dataset_clasp, SaveImgDir)
+    dataset_clasp = main(input_img_dir, angleSet, dataset_clasp, SaveImgDir, data_fmt, fr_factor)
     if save_data:
         Write_To_Json(savefilename, dataset_clasp)
 

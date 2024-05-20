@@ -988,8 +988,10 @@ if __name__ == '__main__':
     if args.database in ['clasp1', 'clasp2']:
         if num_gpus==2:
             init_params['cuda_list'] = [0,1,0,1,0,1]
-        if num_gpus==3:
+        elif num_gpus==3:
            init_params['cuda_list'] = [0,0,1,1,2,2,3,3]
+        else:
+           init_params['cuda_list'] = [0,0]
 
         init_params['apply_RGR'] = False
         init_params['det_thr'] = 0.5
