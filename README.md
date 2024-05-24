@@ -47,6 +47,10 @@ pip install -r panet_requirements.yml
     ```
     python tools/clasp_gt_annotations.py  
     ```
+   - For joint labeled and unlabeled data preparation
+    ```
+    python tools/CLASP_SSL/b2mask_clasp1_annotations.py  
+    ```
    - For labeled, unlabeled, and augmentded data preparation run the above two steps and then run the following
     ```
     for ITER in 4; do  bash tools/train_semi_iters_clasp1.sh SSL_pseudo_labels ${ITER} 10 2; done  
