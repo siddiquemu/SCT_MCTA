@@ -5,7 +5,7 @@ import torch
 from torch.autograd import Variable
 from ._functions import Scatter, Gather
 from torch._six import string_classes, int_classes
-#from torch.utils.data.dataloader import numpy_type_map
+from torch.utils.data.dataloader import numpy_type_map
 #from torch.utils.data._utils.collate import numpy_type_map
 
 
